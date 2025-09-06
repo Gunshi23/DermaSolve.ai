@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DermaSolve.ai | Login</title>
+  <link rel="stylesheet" href="login.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .form-section {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .form-section h1 {
+      color: #e91e63;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .form-section h2 {
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #e91e63;
+    }
+
+    .form-group input {
+      padding: 10px 14px;
+      border: 1px solid #f8bbd0;
+      border-radius: 6px;
+      font-size: 15px;
+      background: #fff0f6;
+      transition: border 0.2s;
+    }
+
+    .form-group input:focus {
+      border: 1px solid #e91e63;
+      outline: none;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox input {
+      margin-right: 8px;
+      accent-color: #e91e63;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-login {
+      background: #e91e63;
+      color: white;
+    }
+
+    .btn-login:hover {
+      background: #c2185b;
+    }
+
+    .btn-register {
+      background: #f8bbd0;
+      color: #333;
+    }
+
+    .btn-register:hover {
+      background: #f48fb1;
+      color: white;
+    }
+
+    .image-section {
+      flex: 1;
+      background: #fce4ec;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image-section img {
+      max-width: 80%;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Form -->
+    <div class="form-section">
+      <h1>DermaSolve.ai</h1>
+      <h2>Welcome Back</h2>
+      <form id="auth-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="Enter your password">
+        </div>
+        <div class="form-group checkbox">
+          <input type="checkbox" id="remember-me">
+          <label for="remember-me">Remember me</label>
+        </div>
+        <div class="btn-container">
+          <button type="button" class="btn btn-login" onclick="location.href='type.html'">Login</button>
+          <button type="button" class="btn btn-register" onclick="location.href='type.html'">Register</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Image -->
+    <div class="image-section">
+      <img src="login.jpg" alt="Illustration">
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DermaSolve.ai</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+
+      /* Background image with gradient overlay */
+      background: 
+        linear-gradient(rgba(255, 192, 203, 0.6), rgba(181, 255, 252, 0.6)),
+        url('type.png') no-repeat center center fixed;
+      background-size: cover;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 420px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.75); /* soft glass effect */
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      padding: 40px 28px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-sizing: border-box;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      color: #d72660;
+      margin-bottom: 36px;
+      font-size: 2.4em;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .option-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, #ff69b4, #d72660);
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 18px 0;
+      font-size: 1.1em;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(215, 38, 96, 0.3);
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .option-btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 6px 16px rgba(215, 38, 96, 0.45);
+    }
+
+    .option-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Smooth fade-in effect */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DermaSolve.ai</h1>
+    <a href="allopathy.html" class="option-btn">Allopathy Solution</a>
+    <a href="home_remedies.html" class="option-btn">Home Remedies</a>
+    <a href="ayurveda.html" class="option-btn">Ayurvedic Solutions</a>
+  </div>
+</body>
+</html>
