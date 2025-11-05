@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WASTIFY CAMERA</title>
+    <title>AI Health Camera</title>
     <style>
+        /* Base styles */
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-image: url('bg.jpg');
-            background-size: contain;
-             background-repeat: repeat-2;
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             padding: 20px;
             margin: 0;
-            color:white;
-            background-img: url('bg.jpg');
+            /* Custom Pink Theme Background */
+            background-color: #ffb6c1; /* Light Pink */
+            color: #1a1a1a;
         }
 
         .main-content {
@@ -25,13 +24,14 @@
         }
 
         video, canvas {
-            border: 1px solid black;
+            border: 2px solid #e75480; /* Medium Pink Border */
             width: 100%;
             max-width: 640px;
             height: auto;
             aspect-ratio: 4/3;
             margin-bottom: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            box-shadow: 0px 4px 15px rgba(231, 84, 128, 0.4); /* Pink Shadow */
         }
         
         .container {
@@ -39,67 +39,89 @@
             max-width: 640px;
             margin-top: 20px;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px hsla(0, 0%, 100%, 1.00);
+            background-color: #ffe4ef; /* Very Light Pink/Off-white */
+            border-radius: 12px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #d72660; /* Dark Pink Text */
+            text-align: center;
+            margin-bottom: 15px;
         }
 
         .controls {
             text-align: center;
             margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         button {
-            margin: 5px;
             padding: 12px 24px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #4CAF50;
+            background-color: #e75480; /* Medium Pink Button */
             color: white;
             border: none;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-            transition: background-color 0.3s ease;
+            border-radius: 25px; /* Pill-shaped buttons */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            flex-grow: 1;
+            max-width: 45%;
         }
 
         button:hover {
-            background-color: #367c39;
+            background-color: #d72660; /* Darker Pink on hover */
+            transform: translateY(-1px);
         }
         
         button:disabled {
-            background-color: #B0DB9C;
+            background-color: #ffd1dc;
             cursor: not-allowed;
+            box-shadow: none;
+            transform: translateY(0);
         }
         
         #imageInput {
             margin: 15px 0;
             padding: 10px;
             width: 100%;
+            border: 1px solid #ffb6c1;
+            border-radius: 8px;
+            background-color: #fff;
         }
         
         #results {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: black;
+            margin-top: 25px;
+            padding: 20px;
+            border: 1px solid #e75480;
+            border-radius: 10px;
+            background-color: #ffb6c1; /* Result box background */
             display: none;
+            color: #d72660;
         }
         
         #responseText {
             white-space: pre-wrap;
             word-wrap: break-word;
+            color: #1a1a1a;
+            font-size: 1rem;
+            line-height: 1.5;
         }
         
         .loading {
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(0,0,0,.3);
+            border: 3px solid rgba(255, 255, 255, .3);
             border-radius: 50%;
-            border-top-color: #000;
+            border-top-color: #d72660;
             animation: spin 1s ease-in-out infinite;
             margin-right: 10px;
+            vertical-align: middle;
         }
         
         @keyframes spin {
@@ -107,25 +129,27 @@
         }
         
         .camera-feedback {
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
+            background-color: #e75480;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 100;
             display: none;
+            font-weight: bold;
         }
         
         .error-message {
-            color: #d32f2f;
-            background-color: #ffebee;
+            color: white;
+            background-color: #d72660;
             padding: 10px;
-            border-radius: 4px;
+            border-radius: 8px;
             margin: 10px 0;
             display: none;
+            font-weight: bold;
         }
         
         @media (max-width: 768px) {
@@ -136,27 +160,31 @@
             button {
                 padding: 10px 16px;
                 font-size: 14px;
-                width: 45%;
+                max-width: 100%; /* Full width buttons on small screens */
+            }
+
+            .controls {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
     <div class="main-content">
-        <h2>You are beautiful!</h2>
+        <h2>AI Dermatology Assistant</h2>
         <div id="cameraFeedback" class="camera-feedback">Image Captured!</div>
         <video id="webcam" autoplay playsinline></video>
         
         <div class="controls">
-            <button id="captureBtn" aria-label="Capture image from webcam">Capture</button>
-            <button id="downloadBtn" aria-label="Download captured image">Download</button>
-            <button id="cameraSelectBtn" aria-label="Select camera">Change Camera</button>
+            <button id="captureBtn" aria-label="Capture image from webcam">Capture Image</button>
+            <button id="downloadBtn" aria-label="Download captured image">Download Image</button>
+            <button id="cameraSelectBtn" aria-label="Select camera">Switch Camera</button>
         </div>
         
-        <canvas id="snapshot"></canvas>
+        <canvas id="snapshot" style="display: none;"></canvas>
 
         <div class="container">
-            <h1>Analyze Image</h1>
+            <h1>Analyze Image for Skin Conditions</h1>
             <div id="errorMessage" class="error-message"></div>
             
             <div class="controls">
@@ -166,27 +194,18 @@
             </div>
             
             <div id="results">
-                <h2>Response:</h2>
+                <h2>Analysis:</h2>
                 <div id="responseText"></div>
             </div>
         </div>
     </div>
 
-    <!-- Import Google's Generative AI Library -->
     <script type="module">
-        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-        
-        // Make it available globally
-        window.GoogleGenerativeAI = GoogleGenerativeAI;
-        
-        // Once the library is loaded, initialize the app
-        document.addEventListener('DOMContentLoaded', initApp);
-        
-        // Configuration
-        const API_KEY = "AIzaSyCtBHSa9ejpjlm-shxxpofq7TOOxUuVyho"; // Your Gemini API key
+        // Configuration - Using the model recommended for multi-modal tasks
+        const API_KEY = "AIzaSyCtBHSa9ejpjlm-shxxpofq7TOOxUuVyho"; // Canvas will provide this in runtime
+        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
+        const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
         const MAX_IMAGE_SIZE = 4 * 1024 * 1024; // 4MB max size
-        // Updated model name - changed from gemini-pro-vision to gemini-1.5-flash
-        const MODEL_NAME = "gemini-1.5-flash";
         
         // DOM Elements
         const webcam = document.getElementById('webcam');
@@ -208,13 +227,7 @@
         let mediaStream = null;
         let isProcessing = false;
         
-        // Set canvas dimensions based on video
-        function setCanvasDimensions() {
-            canvas.width = webcam.videoWidth || 640;
-            canvas.height = webcam.videoHeight || 480;
-        }
-
-        // Show error message
+        // Utility to show error message
         function showError(message) {
             errorMessageDiv.textContent = message;
             errorMessageDiv.style.display = 'block';
@@ -223,7 +236,7 @@
             }, 5000);
         }
         
-        // Show feedback
+        // Utility to show temporary feedback
         function showFeedback(message) {
             cameraFeedback.textContent = message;
             cameraFeedback.style.display = 'block';
@@ -232,15 +245,19 @@
             }, 1500);
         }
 
+        // Set canvas dimensions based on video
+        function setCanvasDimensions() {
+            canvas.width = webcam.videoWidth || 640;
+            canvas.height = webcam.videoHeight || 480;
+        }
+
         // Access the device webcam
         async function setupWebcam(deviceId = null) {
             try {
-                // Stop any existing stream
                 if (mediaStream) {
                     mediaStream.getTracks().forEach(track => track.stop());
                 }
                 
-                // Set constraints based on deviceId
                 const constraints = {
                     video: deviceId ? { deviceId: { exact: deviceId } } : true
                 };
@@ -248,13 +265,11 @@
                 mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
                 webcam.srcObject = mediaStream;
                 
-                // Wait for video to be ready
                 webcam.onloadedmetadata = () => {
                     webcam.play();
                     setCanvasDimensions();
                 };
                 
-                // Enable buttons after webcam is ready
                 webcam.oncanplay = () => {
                     captureBtn.disabled = false;
                     cameraSelectBtn.disabled = false;
@@ -267,7 +282,7 @@
             }
         }
 
-        // Select camera
+        // Select camera (flip/cycle through available video inputs)
         async function selectCamera() {
             try {
                 const devices = await navigator.mediaDevices.enumerateDevices();
@@ -283,18 +298,15 @@
                     return;
                 }
                 
-                // Find current device id
                 const currentTrack = mediaStream?.getVideoTracks()[0];
                 const currentDeviceId = currentTrack?.getSettings().deviceId;
                 
-                // Find next device
                 let nextDeviceIndex = 0;
                 if (currentDeviceId) {
                     const currentIndex = videoDevices.findIndex(d => d.deviceId === currentDeviceId);
                     nextDeviceIndex = (currentIndex + 1) % videoDevices.length;
                 }
                 
-                // Setup webcam with new device
                 await setupWebcam(videoDevices[nextDeviceIndex].deviceId);
                 showFeedback(`Switched to: ${videoDevices[nextDeviceIndex].label || 'Camera ' + (nextDeviceIndex + 1)}`);
             } catch (err) {
@@ -327,7 +339,7 @@
             
             try {
                 const link = document.createElement('a');
-                link.download = `wastify_image_${new Date().toISOString().replace(/[:.]/g, '-')}.png`;
+                link.download = `health_image_${new Date().toISOString().replace(/[:.]/g, '-')}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             } catch (err) {
@@ -347,7 +359,7 @@
                         }
                         const file = new File([blob], "snapshot.png", { type: "image/png" });
                         resolve(file);
-                    }, 'image/png', 0.9); // 0.9 quality for better performance
+                    }, 'image/png', 0.9);
                 } catch (err) {
                     reject(err);
                 }
@@ -360,20 +372,18 @@
                 return file;
             }
             
+            showFeedback("Image is large, resizing...");
+            
             return new Promise((resolve, reject) => {
                 try {
                     const img = new Image();
                     img.onload = () => {
-                        // Create a canvas to resize the image
                         const tempCanvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
                         
-                        // Calculate new dimensions while maintaining aspect ratio
-                        const aspectRatio = width / height;
-                        
-                        // Start with 80% size and decrease until we're under max size
-                        let scale = 0.8;
+                        // Scale factor to roughly target max size
+                        let scale = Math.sqrt(MAX_IMAGE_SIZE / file.size) * 0.9; 
                         
                         tempCanvas.width = width * scale;
                         tempCanvas.height = height * scale;
@@ -386,7 +396,8 @@
                                 reject(new Error("Failed to resize image"));
                                 return;
                             }
-                            const resizedFile = new File([blob], file.name, { type: "image/jpeg" });
+                            // Save as JPEG to minimize file size
+                            const resizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, ".jpeg"), { type: "image/jpeg" });
                             console.log(`Resized image from ${file.size} to ${resizedFile.size} bytes`);
                             resolve(resizedFile);
                         }, 'image/jpeg', 0.85);
@@ -413,7 +424,7 @@
             });
         }
         
-        // Process image with Gemini
+        // Process image with Gemini (using raw fetch and exponential backoff)
         async function processImage(file) {
             if (isProcessing) {
                 showError("Already processing an image. Please wait.");
@@ -425,90 +436,85 @@
                 return;
             }
             
-            if (!API_KEY || API_KEY === "YOUR_API_KEY") {
-                showError("Please set your Gemini API key in the code");
-                return;
-            }
-            
-            // Check file type
-            if (!file.type.startsWith('image/')) {
-                showError("Please select a valid image file");
-                return;
-            }
-            
             try {
                 isProcessing = true;
                 submitButton.disabled = true;
                 useSnapshotBtn.disabled = true;
                 
-                // Show results area with loading indicator
                 resultsDiv.style.display = "block";
                 responseText.innerHTML = '<div class="loading"></div> Analyzing image...';
                 
-                // Resize image if too large
                 const processedFile = await resizeImageIfNeeded(file);
-                
-                // Check if the Gemini API is available
-                if (!window.GoogleGenerativeAI) {
-                    throw new Error("Google Generative AI library not loaded. Please refresh the page and try again.");
-                }
-                
-                // Initialize the Gemini API
-                console.log("Initializing Gemini API...");
-                const genAI = new window.GoogleGenerativeAI(API_KEY);
-                
-                // Use the updated model - gemini-1.5-flash instead of gemini-pro-vision
-                const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-                
-                // Convert image to base64
                 const base64Image = await fileToBase64(processedFile);
                 
-                // Create the image part for the API
-                const imagePart = {
-                    inlineData: {
-                        data: base64Image,
-                        mimeType: processedFile.type
-                    }
-                };
+                const prompt = "You are an AI healthcare assistant focused only on dermatology and injury analysis. Analyze this image for any visible wounds, injuries, or skin problems. Provide a clear, bulleted report covering: Detected Problem (if any), Severity (Low, Medium, High), Possible Causes, and Gentle Home Remedies/First Aid Tips (using common household items, if applicable). **Crucially, start your response with a strong disclaimer that this is NOT medical advice and a doctor should be consulted.**";
                 
-                console.log("Sending request to Gemini API...");
-                
-                // The prompt to send to Gemini
-                const prompt = "You are an AI healthcare assistant.Analyze this image for any visible wounds, injuries, or skin problems. Discuss in points - detected problem, severity, possible causes, and home remedies with DIY products . Rules: Focus only on wound, injury, or dermatology-related issues.";
-                
-                // Generate content using the correct format for the updated model
-                const result = await model.generateContent({
+                const payload = {
                     contents: [{
                         parts: [
                             { text: prompt },
-                            imagePart
+                            {
+                                inlineData: {
+                                    data: base64Image,
+                                    mimeType: processedFile.type
+                                }
+                            }
                         ]
-                    }]
-                });
-                
-                console.log("Received response:", result);
-                
-                // Get the response text
-                let responseTextContent;
-                if (result && result.response) {
-                    responseTextContent = typeof result.response.text === 'function' 
-                        ? result.response.text() 
-                        : result.response.text;
-                } else {
-                    responseTextContent = "Received empty response from API";
+                    }],
+                };
+
+                let response = null;
+                const MAX_RETRIES = 5;
+                for (let i = 0; i < MAX_RETRIES; i++) {
+                    const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                    
+                    try {
+                        response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (response.status === 429 && i < MAX_RETRIES - 1) {
+                            console.warn(`Rate limit exceeded. Retrying in ${delay / 1000}s...`);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            continue; // Retry
+                        }
+
+                        if (!response.ok) {
+                            const errorBody = await response.text();
+                            throw new Error(`API call failed with status ${response.status}: ${errorBody}`);
+                        }
+                        break; // Success
+                    } catch (error) {
+                        if (i === MAX_RETRIES - 1) {
+                            throw error; // Throw if final retry fails
+                        }
+                        console.error(`Attempt ${i + 1} failed: ${error.message}. Retrying...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    }
                 }
                 
-                // Update the UI with the response
+                if (!response) throw new Error("API call failed after all retries.");
+
+                const result = await response.json();
+                
+                let responseTextContent = "No analysis result received.";
+                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    responseTextContent = result.candidates[0].content.parts[0].text;
+                } else if (result.error) {
+                    responseTextContent = `API Error: ${result.error.message || 'Unknown error'}`;
+                }
+                
                 responseText.textContent = responseTextContent;
                 
             } catch (error) {
-                console.error("Error with Gemini API:", error);
-                responseText.textContent = `Error: ${error.message || "Failed to analyze image"}`;
+                console.error("Error processing image:", error);
+                responseText.textContent = `Analysis Failed: ${error.message}. Please try a smaller image or check your internet connection.`;
+                resultsDiv.style.display = "block";
             } finally {
                 isProcessing = false;
                 submitButton.disabled = false;
-                
-                // Re-enable snapshot button only if we have a snapshot
                 if (hasSnapshot) {
                     useSnapshotBtn.disabled = false;
                 }
@@ -517,17 +523,13 @@
 
         // Initialize application
         function initApp() {
-            console.log("Initializing Wastify Camera app...");
-            
-            // Set initial button states
             downloadBtn.disabled = true;
             useSnapshotBtn.disabled = true;
             captureBtn.disabled = true;
+            submitButton.disabled = false; // Initially allow uploaded image analysis
             
-            // Initialize webcam on page load
             setupWebcam();
             
-            // Set up event listeners
             captureBtn.addEventListener('click', captureImage);
             downloadBtn.addEventListener('click', downloadImage);
             cameraSelectBtn.addEventListener('click', selectCamera);
@@ -555,77 +557,26 @@
                 processImage(file);
             });
             
-            // Set up file input change event
             imageInput.addEventListener('change', () => {
                 const file = imageInput.files[0];
                 if (file) {
-                    // Enable submit button when file is selected
                     submitButton.disabled = false;
                 }
             });
             
-            // Handle window resize to adjust canvas
+            // Handle window resize (important for responsiveness)
             window.addEventListener('resize', () => {
                 if (hasSnapshot) {
-                    // Save the current image data
                     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
                     setCanvasDimensions();
-                    // Restore the image data after resize
                     context.putImageData(imageData, 0, 0);
                 }
             });
             
             console.log("App initialization complete");
         }
+        
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
-<style>
-    body {
-        background-image: url('bg.jpg');
-        background-size: contain;
-        background-repeat: repeat-2;
-        color: black;
-        background-color: #ffb6c1;
-         background-blend-mode: multiply;
-        background-image: linear-gradient(135deg, #ffffffff 60%, rgba(255,255,255,0.6) 100%), url('bg.jpg');
-        filter: blur(1px) brightness(1.05) contrast(1.1);
-    }
-    .container {
-        background-color: #ffe4ef;
-        box-shadow: 0px 0px 10px #ffb6c1;
-    }
-    .main-content {
-        background: none;
-    }
-    video, canvas {
-        border: 2px solid #e75480;
-        box-shadow: 0px 0px 10px #e75480;
-    }
-    button {
-        background-color: #e75480;
-        color: #fff;
-        box-shadow: 2px 2px 5px #ffb6c1;
-    }
-    button:hover {
-        background-color: #d72660;
-    }
-    button:disabled {
-        background-color: #ffd1dc;
-        color: #fff;
-    }
-    #results {
-        background-color: #ffb6c1;
-        border: 1px solid #e75480;
-        color: #d72660;
-    }
-    .camera-feedback {
-        background-color: #e75480;
-        color: #fff;
-    }
-    .error-message {
-        color: #d72660;
-        background-color: #ffe4ef;
-    }
-</style>
-
