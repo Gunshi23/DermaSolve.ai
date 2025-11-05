@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Health Camera</title>
     <style>
-        /* Base styles */
+        /* --- Base and Layout Styles --- */
         body {
             display: flex;
             flex-direction: column;
@@ -13,7 +13,7 @@
             font-family: 'Inter', sans-serif;
             padding: 20px;
             margin: 0;
-            /* Custom Pink Theme Background */
+            /* Pink Theme Background */
             background-color: #ffb6c1; /* Light Pink */
             color: #1a1a1a;
         }
@@ -59,6 +59,7 @@
             gap: 10px;
         }
 
+        /* --- Button Styles --- */
         button {
             padding: 12px 24px;
             font-size: 16px;
@@ -93,7 +94,8 @@
             border-radius: 8px;
             background-color: #fff;
         }
-        
+
+        /* --- Results and Feedback Styles --- */
         #results {
             margin-top: 25px;
             padding: 20px;
@@ -152,6 +154,7 @@
             font-weight: bold;
         }
         
+        /* --- Responsive Styles --- */
         @media (max-width: 768px) {
             .container, .main-content {
                 width: 95%;
@@ -201,9 +204,9 @@
     </div>
 
     <script type="module">
-        // Configuration - Using the model recommended for multi-modal tasks
-        const API_KEY = "AIzaSyCtBHSa9ejpjlm-shxxpofq7TOOxUuVyho"; // Canvas will provide this in runtime
-        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
+        // Configuration - Using the robust raw fetch method
+        const API_KEY = "AIzaSyCtBHSa9ejpjlm-shxxpofq7TOOxUuVyho"; // Automatically provided by the environment
+        const BASE_API_URL = "https://generativelanguage.googleapis.com/v1beta/models";
         const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
         const MAX_IMAGE_SIZE = 4 * 1024 * 1024; // 4MB max size
         
@@ -447,6 +450,10 @@
                 const processedFile = await resizeImageIfNeeded(file);
                 const base64Image = await fileToBase64(processedFile);
                 
+                // Construct the final URL with the API key placeholder
+                const finalApiUrl = `${BASE_API_URL}/${MODEL_NAME}:generateContent?key=${API_KEY}`;
+                
+                // Updated prompt for better safety and structure
                 const prompt = "You are an AI healthcare assistant focused only on dermatology and injury analysis. Analyze this image for any visible wounds, injuries, or skin problems. Provide a clear, bulleted report covering: Detected Problem (if any), Severity (Low, Medium, High), Possible Causes, and Gentle Home Remedies/First Aid Tips (using common household items, if applicable). **Crucially, start your response with a strong disclaimer that this is NOT medical advice and a doctor should be consulted.**";
                 
                 const payload = {
@@ -469,7 +476,7 @@
                     const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
                     
                     try {
-                        response = await fetch(API_URL, {
+                        response = await fetch(finalApiUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
@@ -510,7 +517,7 @@
                 
             } catch (error) {
                 console.error("Error processing image:", error);
-                responseText.textContent = `Analysis Failed: ${error.message}. Please try a smaller image or check your internet connection.`;
+                responseText.textContent = `Analysis Failed: API call failed with status 403: ${error.message}. Please check console for details.`;
                 resultsDiv.style.display = "block";
             } finally {
                 isProcessing = false;
@@ -526,7 +533,7 @@
             downloadBtn.disabled = true;
             useSnapshotBtn.disabled = true;
             captureBtn.disabled = true;
-            submitButton.disabled = false; // Initially allow uploaded image analysis
+            submitButton.disabled = false;
             
             setupWebcam();
             
