@@ -206,7 +206,7 @@
     <script type="module">
         // Configuration - Using the robust raw fetch method
         const API_KEY = "AIzaSyCtBHSa9ejpjlm-shxxpofq7TOOxUuVyho"; // Automatically provided by the environment
-        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
+        const BASE_API_URL = "https://generativelanguage.googleapis.com/v1beta/models";
         const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
         const MAX_IMAGE_SIZE = 4 * 1024 * 1024; // 4MB max size
         
@@ -450,8 +450,11 @@
                 const processedFile = await resizeImageIfNeeded(file);
                 const base64Image = await fileToBase64(processedFile);
                 
+                // Construct the final URL with the API key placeholder
+                const finalApiUrl = `${BASE_API_URL}/${MODEL_NAME}:generateContent?key=${API_KEY}`;
+                
                 // Updated prompt for better safety and structure
-                const prompt = "You are an AI healthcare assistant focused only on dermatology and injury analysis. Analyze this image for any visible wounds, injuries, or skin problems. Provide a clear, bulleted report covering: Detected Problem (if any), Severity (Low, Medium, High), Possible Causes, and Gentle Home Remedies/First Aid Tips (using common household items, if applicable). **Crucially, start your response with a strong disclaimer that this is NOT medical advice and a doctor should be consulted.**";
+                const prompt = "You are an AI healthcare assistant focused only on dermatology and injury analysis. Analyze this image for any visible wounds, injuries, or skin problems. Provide a clear, bulleted report covering: Detected Problem (if any), Severity (Low, Medium, High), Possible Causes, and allopathy solutions/First Aid Tips (using common household items, if applicable). **Crucially, start your response with a strong disclaimer that this is NOT medical advice and a doctor should be consulted.**";
                 
                 const payload = {
                     contents: [{
@@ -473,7 +476,7 @@
                     const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
                     
                     try {
-                        response = await fetch(API_URL, {
+                        response = await fetch(finalApiUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
@@ -514,7 +517,7 @@
                 
             } catch (error) {
                 console.error("Error processing image:", error);
-                responseText.textContent = `Analysis Failed: ${error.message}. Please try a smaller image or check your internet connection.`;
+                responseText.textContent = `Analysis Failed: API call failed with status 403: ${error.message}. Please check console for details.`;
                 resultsDiv.style.display = "block";
             } finally {
                 isProcessing = false;
