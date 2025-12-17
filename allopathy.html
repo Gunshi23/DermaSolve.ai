@@ -205,7 +205,7 @@
 
     <script type="module">
         // Configuration - Using the robust raw fetch method
-        const API_KEY = "AIzaSyCtBHSa9ejpjlm-shxxpofq7TOOxUuVyho"; // Automatically provided by the environment
+        const API_KEY = "AIzaSyAK9gLtbR1Ud9lpHvEXQF02JPUFcQrg_ZA"; // Automatically provided by the environment
         const BASE_API_URL = "https://generativelanguage.googleapis.com/v1beta/models";
         const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
         const MAX_IMAGE_SIZE = 4 * 1024 * 1024; // 4MB max size
@@ -454,7 +454,7 @@
                 const finalApiUrl = `${BASE_API_URL}/${MODEL_NAME}:generateContent?key=${API_KEY}`;
                 
                 // Updated prompt for better safety and structure
-                const prompt = "You are an AI healthcare assistant focused only on dermatology and injury analysis. Analyze this image for any visible wounds, injuries, or skin problems. Provide a clear, bulleted report covering: Detected Problem (if any), Severity (Low, Medium, High), Possible Causes, and allopathy solutions/First Aid Tips (using common household items, if applicable). **Crucially, start your response with a strong disclaimer that this is NOT medical advice and a doctor should be consulted.**";
+                const prompt = "You are an AI healthcare assistant focused only on dermatology and injury analysis. Analyze this image for any visible wounds, injuries, or skin problems. Provide a clear, bulleted report covering: Detected Problem (if any), Severity (Low, Medium, High), Possible Causes, and allopathy solutions/First Aid Tips, give diy solutions also (using common household items, if applicable). **Crucially, start your response with a strong disclaimer that this is NOT medical advice and a doctor should be consulted.**";
                 
                 const payload = {
                     contents: [{
@@ -587,3 +587,4 @@
     </script>
 </body>
 </html>
+
